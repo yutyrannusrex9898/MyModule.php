@@ -140,7 +140,7 @@ class SamModuleAdminController extends ModuleAdminController
             parent::postProcess();
         }
     }
-    //aaa
+    //aaaaa
     public function initContent()
     {
         $this->content = $this->renderView();
