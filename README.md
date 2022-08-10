@@ -1,0 +1,2 @@
+# MyModule.php
+working module
