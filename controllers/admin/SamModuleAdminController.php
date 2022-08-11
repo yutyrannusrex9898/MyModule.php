@@ -21,7 +21,6 @@ class SamModuleAdminController extends ModuleAdminController
     {
         $lang = new Language((int)Configuration::get('PS_LANG_DEFAULT'));
         $langs = Language::getLanguages();
-        $id_shop = (int)$this->context->shop->id;
 
 
 
@@ -103,12 +102,8 @@ class SamModuleAdminController extends ModuleAdminController
     public function getConfigFieldsValues()
     {
         //function to get the name and desc and put it into the html text boxes
-        $id_lang = (int)$this->context->language->id;
-        $id_shop = (int)$this->context->shop->id;
         $file_object = array();
         $query = Db::getInstance(_PS_USE_SQL_SLAVE_)->executeS('SELECT name, description FROM `ps_mymodule`');
-        //var_dump($query);
-        //die();
         $file_object['title'] = $query[0]['name'];      //if there is a title or description previously filled in it will appear in prestashop
         $file_object['description'] = $query[0]['description'];
 
@@ -123,9 +118,7 @@ class SamModuleAdminController extends ModuleAdminController
         if (Tools::isSubmit('submitExport')) {
             $title = Tools::getValue('title') . "";
             $description = Tools::getValue('description');
-            $status = Tools::getValue('status');
             $ifQuery = Db::getInstance(_PS_USE_SQL_SLAVE_)->executeS('SELECT name, description FROM `ps_mymodule`');
-//            var_dump($ifQuery);
             //if the database has something in it the value will get replaced if a new one is put in, however if the database table is empty it will add a new one
             if (empty($title) && empty($description)) {
                 return $this->error[] = 'Type something in';
@@ -134,22 +127,11 @@ class SamModuleAdminController extends ModuleAdminController
             if($ifQuery[0]['name'] != "" && $ifQuery[0]['description'] != ""){
                 $updateQuery = "UPDATE `ps_mymodule` SET name= '".$title."',description = '".$description."'";
                 Db::getInstance()->Execute($updateQuery);
-                echo "1";
             }
             else{
                 Db::getInstance()->Execute("INSERT INTO `ps_mymodule`(`name`, `description`) VALUES ('".$title."', '".$description."')");
-                echo "2";
             }
 
-            $where_status = '';
-
-            if ($status != 0) {
-                $f = fopen('php://output', 'w');
-                foreach ($this->available_fields['orders'] as $field => $array) {
-                    $titles[] = $array['label'];
-                }
-                $delimiter = ';';
-            }
             parent::postProcess();
         }
     }

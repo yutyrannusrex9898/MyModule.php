@@ -73,8 +73,6 @@ class MyModule extends Module
 
         return (
             parent::install()
-            && $this->registerHook('leftColumn') //tab placement
-            && $this->registerHook('header')
             && $this->installTab('AdminCatalog', 'YourAdminClassName', 'a tab lol') && //installing admin class in addition to the tab
             Configuration::updateValue('MODULENAME', "ModuleName")
             && Configuration::updateValue('MYMODULE_NAME', 'my friend')
