@@ -93,6 +93,7 @@ class SamModuleAdminController extends ModuleAdminController
             'fields_value' => $this->getConfigFieldsValues(),   //calls function to get values from database if they are already saved
             'languages' => $this->context->controller->getLanguages(),
         );
+        //generates the form when done
 
 
         return $helper->generateForm(array($fields_form));
