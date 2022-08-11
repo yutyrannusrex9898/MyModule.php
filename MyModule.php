@@ -152,7 +152,7 @@ class MyModule extends Module
         $helper->fields_value['MYMODULE_CONFIG'] = Tools::getValue('MYMODULE_CONFIG', Configuration::get('MYMODULE_CONFIG'));
 
         return $helper->generateForm([$form]);
-        //outputs the generation of the form
+        //outputs the generation of the form.
     }
 
 }
