@@ -25,7 +25,7 @@ class MyModule extends Module
 
         //name and description of the module, will appear in Module catalogue
         $this->displayName = $this->l('My module');
-        $this->description = $this->l('doesnt do much');
+        $this->description = $this->l('Adds a tab to the side menu bar that will save your data in your local database in a table called ps_mymodule, however any name can be changed');
 
         $this->confirmUninstall = $this->l('please PLEASE dont uninstall :(');
         //ya have to provide a name
@@ -70,7 +70,7 @@ class MyModule extends Module
 
         return (
             parent::install()
-            && $this->registerHook('leftColumn')
+            && $this->registerHook('leftColumn') //tab placement
             && $this->registerHook('header')
             && $this->installTab('AdminCatalog', 'YourAdminClassName', 'a tab lol') && //installing admin class in addition to the tab
             Configuration::updateValue('MODULENAME', "ModuleName")
@@ -81,6 +81,7 @@ class MyModule extends Module
 
     public function uninstall()
     {
+        //base uninstall function, tab uninstall function is separate
         return (
             parent::uninstall()
             && Configuration::deleteByName('MYMODULE_NAME'));
