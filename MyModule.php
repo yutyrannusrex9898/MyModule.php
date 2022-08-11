@@ -6,6 +6,7 @@ if (!defined('_PS_VERSION_')) {
 
 class MyModule extends Module
 {
+    //constructor
     public function __construct()
     {
         //attributes of my module's class
@@ -27,7 +28,7 @@ class MyModule extends Module
         $this->description = $this->l('doesnt do much');
 
         $this->confirmUninstall = $this->l('please PLEASE dont uninstall :(');
-
+        //ya have to provide a name
         if (!Configuration::get('MYMODULE_NAME')) {
             $this->warning = $this->l('No name provided');
         }
@@ -89,7 +90,7 @@ class MyModule extends Module
     {
         $output = '';
 
-        // this part is executed only when the form is submitted
+        // this part is executed only when the form is submitted, also used to get names and content for config file
         if (Tools::isSubmit('submit' . $this->name)) {
             // retrieve the value set by the user
             $configValue = (string) Tools::getValue('MYMODULE_CONFIG');

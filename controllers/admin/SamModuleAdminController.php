@@ -2,6 +2,7 @@
 
 class SamModuleAdminController extends ModuleAdminController
 {
+    //constructor
     public function __construct()
     {
         parent::__construct();
@@ -35,13 +36,13 @@ class SamModuleAdminController extends ModuleAdminController
         );
         $inputs = array(
             array(
-                'type' => 'text',
+                'type' => 'text',   //menu tab title
                 'value' => 'Hi',
                 'label' => $this->l('Hello!!'),
                 'name' => 'title',
             ),
             array(
-                'type' => 'textarea',
+                'type' => 'textarea',   //menu tab description
                 'value' => 'Hi!',
                 'label' => $this->l('Desc'),
                 'name' => 'description',
@@ -49,7 +50,7 @@ class SamModuleAdminController extends ModuleAdminController
 
             array(
                 'type' => 'select',
-                'label' => $this->l('Status'),
+                'label' => $this->l('Status'), //menu tab submit button
                 'desc' => $this->l('Choose a language you wish to export'),
                 'name' => 'status',
                 'options' => array(
@@ -85,7 +86,7 @@ class SamModuleAdminController extends ModuleAdminController
         $helper->currentIndex = self::$currentIndex;
         $helper->token = $this->token;
         $helper->tpl_vars = array(
-            'fields_value' => $this->getConfigFieldsValues(),
+            'fields_value' => $this->getConfigFieldsValues(),   //calls function to get values from database if they are already saved
             'languages' => $this->context->controller->getLanguages(),
         );
 
@@ -94,13 +95,14 @@ class SamModuleAdminController extends ModuleAdminController
     }
     public function getConfigFieldsValues()
     {
+        //function to get the name and desc and put it into the html text boxes
         $id_lang = (int)$this->context->language->id;
         $id_shop = (int)$this->context->shop->id;
         $file_object = array();
         $query = Db::getInstance(_PS_USE_SQL_SLAVE_)->executeS('SELECT name, description FROM `ps_mymodule`');
         //var_dump($query);
         //die();
-        $file_object['title'] = $query[0]['name'];
+        $file_object['title'] = $query[0]['name'];      //if there is a title or description previously filled in it will appear in prestashop
         $file_object['description'] = $query[0]['description'];
 
         return $file_object;
@@ -108,15 +110,17 @@ class SamModuleAdminController extends ModuleAdminController
 
     public function postProcess()
     {
+        //only activates once the form is submitted
         if (Tools::isSubmit('submitExport')) {
             $title = Tools::getValue('title') . "";
             $description = Tools::getValue('description');
             $status = Tools::getValue('status');
             $ifQuery = Db::getInstance(_PS_USE_SQL_SLAVE_)->executeS('SELECT name, description FROM `ps_mymodule`');
 //            var_dump($ifQuery);
-
+            //if the database has something in it the value will get replaced if a new one is put in, however if the database table is empty it will add a new one
             if (empty($title) && empty($description)) {
                 return $this->error[] = 'Type something in';
+                echo "0";
             }
             if($ifQuery[0]['name'] != "" && $ifQuery[0]['description'] != ""){
                 $updateQuery = "UPDATE `ps_mymodule` SET name= '".$title."',description = '".$description."'";
