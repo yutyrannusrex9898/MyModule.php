@@ -2,18 +2,21 @@
 
 class SamModuleAdminController extends ModuleAdminController
 {
-    //constructor
+    //constructor, no attributes
     public function __construct()
     {
         parent::__construct();
     }
 
-
+    //returns the result of renderConfigurationForm function, just there to activate it
     public function renderView()
     {
         return $this->renderConfigurationForm();
     }
 
+    //sets language for tab
+    //below is all the html, creates title description and submit button that when activated moves you onto postprocess
+    //function returns html structure of the tab
     public function renderConfigurationForm()
     {
         $lang = new Language((int)Configuration::get('PS_LANG_DEFAULT'));
@@ -34,6 +37,7 @@ class SamModuleAdminController extends ModuleAdminController
             'id_option' => 0,
             'name' => 'All'
         );
+
         $inputs = array(
             array(
                 'type' => 'text',   //menu tab title
@@ -75,8 +79,8 @@ class SamModuleAdminController extends ModuleAdminController
             ),
         );
 
-        $helper = new HelperForm();
-        $helper->show_toolbar = false;
+        $helper = new HelperForm(); //helper related things, activates functions like getConfigFieldsValues to change text in title or desc if there is data in the database
+        $helper->show_toolbar = false; //returns the structure of the tab
 
         $helper->default_form_language = $lang->id;
         $helper->allow_employee_form_lang = Configuration::get('PS_BO_ALLOW_EMPLOYEE_FORM_LANG') ? Configuration::get('PS_BO_ALLOW_EMPLOYEE_FORM_LANG') : 0;
@@ -93,6 +97,8 @@ class SamModuleAdminController extends ModuleAdminController
 
         return $helper->generateForm(array($fields_form));
     }
+
+    //get values from database in case it already has values in it.
     public function getConfigFieldsValues()
     {
         //function to get the name and desc and put it into the html text boxes
@@ -105,12 +111,14 @@ class SamModuleAdminController extends ModuleAdminController
         $file_object['title'] = $query[0]['name'];      //if there is a title or description previously filled in it will appear in prestashop
         $file_object['description'] = $query[0]['description'];
 
+        //returns an array with the values of name and title from the database
         return $file_object;
     }
 
     public function postProcess()
     {
-        //only activates once the form is submitted
+        //only activates once the form is submitted, saves all content in local database and replaces data if need be
+        //doesnt return anything
         if (Tools::isSubmit('submitExport')) {
             $title = Tools::getValue('title') . "";
             $description = Tools::getValue('description');
@@ -144,7 +152,7 @@ class SamModuleAdminController extends ModuleAdminController
             parent::postProcess();
         }
     }
-    //work
+
     public function initContent()
     {
         $this->content = $this->renderView();

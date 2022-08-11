@@ -6,7 +6,7 @@ if (!defined('_PS_VERSION_')) {
 
 class MyModule extends Module
 {
-    //constructor
+    //constructor, 7 attributes
     public function __construct()
     {
         //attributes of my module's class
@@ -36,6 +36,7 @@ class MyModule extends Module
 
     //function to install a tab on the left menu, I named the tab "Hello"
     public function installTab($MyModule, $menuTab){
+        //
 
         $tab_id = Tab::getIdFromClassName('MyModule');
         $languages = Language::getLanguages(false);
@@ -55,6 +56,7 @@ class MyModule extends Module
     }
 
     //removes whatever tab was added during installation, a bit wonky though
+    //activates during uninstallation
     public function uninstallTab()
     {
         $id_tab = (int) Tab::getIdFromClassName('MyModule');
@@ -62,6 +64,7 @@ class MyModule extends Module
         return $tab->delete();
     }
 
+    //activates the instant ya click install, install tab is separate and located in line 38
     public function install()
     {
         if (Shop::isFeatureActive()) {
@@ -89,9 +92,10 @@ class MyModule extends Module
     }
     public function getContent()
     {
+        //content for config file
         $output = '';
 
-        // this part is executed only when the form is submitted, also used to get names and content for config file
+        // this part is executed only when the config form is submitted, also used to get names and content for config file
         if (Tools::isSubmit('submit' . $this->name)) {
             // retrieve the value set by the user
             $configValue = (string) Tools::getValue('MYMODULE_CONFIG');
@@ -150,6 +154,7 @@ class MyModule extends Module
         $helper->fields_value['MYMODULE_CONFIG'] = Tools::getValue('MYMODULE_CONFIG', Configuration::get('MYMODULE_CONFIG'));
 
         return $helper->generateForm([$form]);
+        //outputs the generation of the form
     }
 
 }
